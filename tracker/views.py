@@ -8,9 +8,17 @@ def home(request):
     projects = FarmProject.objects.all()
     tasks = FarmTask.objects.all()
 
+    user_role = None
+    if request.user.is_authenticated:
+        try:
+            user_role = request.user.userprofile.role
+        except:
+            user_role = "No role assigned"
+
     return render(request, "tracker/home.html", {
         "projects": projects,
         "tasks": tasks,
+        "user_role": user_role,
     })
 
 @login_required
