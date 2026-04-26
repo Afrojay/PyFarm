@@ -1,0 +1,183 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Admin",
+      "last_name": "User",
+      "email": "admin@pyfarm.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-04-26T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "manager",
+      "first_name": "Farm",
+      "last_name": "Manager",
+      "email": "manager@pyfarm.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-26T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "worker",
+      "first_name": "Field",
+      "last_name": "Worker",
+      "email": "worker@pyfarm.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-26T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "agronomist",
+      "first_name": "Crop",
+      "last_name": "Advisor",
+      "email": "agronomist@pyfarm.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-04-26T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "tracker.userprofile",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "role": "FARM_MANAGER"
+    }
+  },
+  {
+    "model": "tracker.userprofile",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "role": "FIELD_WORKER"
+    }
+  },
+  {
+    "model": "tracker.userprofile",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "role": "AGRONOMIST"
+    }
+  },
+  {
+    "model": "tracker.field",
+    "pk": 1,
+    "fields": {
+      "name": "North Field",
+      "crop_type": "Potatoes",
+      "size_acres": "5.50",
+      "location": "Main Farm"
+    }
+  },
+  {
+    "model": "tracker.field",
+    "pk": 2,
+    "fields": {
+      "name": "East Field",
+      "crop_type": "Carrots",
+      "size_acres": "3.00",
+      "location": "Back Farm"
+    }
+  },
+  {
+    "model": "tracker.farmproject",
+    "pk": 1,
+    "fields": {
+      "title": "Spring Planting Plan",
+      "description": "A project for preparing and planting potatoes in the north field.",
+      "field": 1,
+      "manager": 2,
+      "start_date": "2026-04-01",
+      "end_date": "2026-05-01",
+      "status": "IN_PROGRESS"
+    }
+  },
+  {
+    "model": "tracker.farmproject",
+    "pk": 2,
+    "fields": {
+      "title": "Carrot Growing Project",
+      "description": "A project for organising carrot growing tasks in the east field.",
+      "field": 2,
+      "manager": 2,
+      "start_date": "2026-04-10",
+      "end_date": "2026-06-10",
+      "status": "PLANNED"
+    }
+  },
+  {
+    "model": "tracker.farmtask",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "title": "Prepare soil",
+      "description": "Clear weeds and prepare the soil before planting.",
+      "assigned_to": 3,
+      "due_date": "2026-04-05",
+      "status": "DONE",
+      "priority": "HIGH"
+    }
+  },
+  {
+    "model": "tracker.farmtask",
+    "pk": 2,
+    "fields": {
+      "project": 1,
+      "title": "Plant seed potatoes",
+      "description": "Plant the seed potatoes in prepared rows.",
+      "assigned_to": 3,
+      "due_date": "2026-04-12",
+      "status": "IN_PROGRESS",
+      "priority": "HIGH"
+    }
+  },
+  {
+    "model": "tracker.farmtask",
+    "pk": 3,
+    "fields": {
+      "project": 2,
+      "title": "Check soil moisture",
+      "description": "Inspect the soil moisture level before planting carrots.",
+      "assigned_to": 4,
+      "due_date": "2026-04-15",
+      "status": "TODO",
+      "priority": "MEDIUM"
+    }
+  }
+]
