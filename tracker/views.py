@@ -21,6 +21,15 @@ def home(request):
         "user_role": user_role,
     })
 
+def project_detail(request, project_id):
+    project = get_object_or_404(FarmProject, id=project_id)
+    tasks = project.tasks.all()
+
+    return render(request, "tracker/project_detail.html", {
+        "project": project,
+        "tasks": tasks,
+    })
+
 @login_required
 def create_field(request):
     if request.method == "POST":

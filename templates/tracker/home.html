@@ -29,7 +29,7 @@
 
     {% for project in projects %}
         <div>
-            <h3>{{ project.title }}</h3>
+            <h3><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></h3>
             <p>{{ project.description }}</p>
             <p><strong>Field:</strong> {{ project.field.name }}</p>
             <p><strong>Status:</strong> {{ project.status }}</p>
