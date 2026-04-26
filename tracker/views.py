@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import FarmProject, FarmTask, Field
 from .forms import FieldForm, FarmProjectForm, FarmTaskForm
 
@@ -12,7 +13,7 @@ def home(request):
         "tasks": tasks,
     })
 
-
+@login_required
 def create_field(request):
     if request.method == "POST":
         form = FieldForm(request.POST)
@@ -27,7 +28,7 @@ def create_field(request):
         "title": "Add Field",
     })
 
-
+@login_required
 def create_project(request):
     if request.method == "POST":
         form = FarmProjectForm(request.POST)
@@ -45,6 +46,7 @@ def create_project(request):
     })
 
 
+@login_required
 def create_task(request):
     if request.method == "POST":
         form = FarmTaskForm(request.POST)
@@ -59,7 +61,7 @@ def create_task(request):
         "title": "Create Task",
     })
 
-
+@login_required
 def mark_task_done(request, task_id):
     task = get_object_or_404(FarmTask, id=task_id)
     task.status = "DONE"
