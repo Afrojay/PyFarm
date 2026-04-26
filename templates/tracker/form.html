@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }} - PyFarm</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+
+    <p><a href="{% url 'home' %}">Back to dashboard</a></p>
+</body>
+</html>
