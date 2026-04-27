@@ -8,11 +8,17 @@
     <p>Agricultural planning and task management system.</p>
 
     {% if user.is_authenticated %}
-    <p>Logged in as: {{ user.username }}</p>
-    <p>Role: {{ user_role }}</p>
-{% else %}
-    <p>You are not logged in.</p>
-{% endif %}
+        <p>Logged in as: {{ user.username }}</p>
+        <p>Role: {{ user_role }}</p>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Log out</button>
+        </form>
+    {% else %}
+        <p>You are not logged in.</p>
+        <a href="{% url 'login' %}">Log in</a>
+    {% endif %}
 
     <nav>
         <a href="{% url 'create_field' %}">Add Field</a> |
