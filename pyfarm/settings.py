@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^b2(u@iwziv7!8s9arcay)&exb3$)m4$!7))a$a#kr@4w@sy_%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["pyfarm.onrender.com", "127.0.0.1", "localhost"]
 
