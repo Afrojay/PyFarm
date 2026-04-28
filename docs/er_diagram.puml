@@ -1,0 +1,126 @@
+@startuml
+title PyFarm ER Diagram
+
+hide circle
+skinparam linetype ortho
+
+entity "auth_user" as AUTH_USER {
+  * id : bigint <<PK>>
+  --
+  username : varchar
+  first_name : varchar
+  last_name : varchar
+  email : varchar
+  is_staff : boolean
+  is_active : boolean
+  is_superuser : boolean
+  last_login : datetime
+  date_joined : datetime
+}
+
+entity "tracker_userprofile" as TRACKER_USERPROFILE {
+  * id : bigint <<PK>>
+  --
+  * user_id : bigint <<FK>>
+  role : varchar
+}
+
+entity "tracker_field" as TRACKER_FIELD {
+  * id : bigint <<PK>>
+  --
+  name : varchar
+  crop_type : varchar
+  size_acres : decimal
+  location : varchar
+}
+
+entity "tracker_farmproject" as TRACKER_FARMPROJECT {
+  * id : bigint <<PK>>
+  --
+  * field_id : bigint <<FK>>
+  * manager_id : bigint <<FK>>
+  title : varchar
+  description : text
+  start_date : date
+  end_date : date
+  status : varchar
+}
+
+entity "tracker_farmtask" as TRACKER_FARMTASK {
+  * id : bigint <<PK>>
+  --
+  * project_id : bigint <<FK>>
+  assigned_to_id : bigint <<FK, nullable>>
+  title : varchar
+  description : text
+  image : varchar
+  due_date : date
+  status : varchar
+  priority : varchar
+  progress_comment : text
+}
+
+entity "tracker_farmtaskprogressupdate" as TRACKER_FARMTASKPROGRESSUPDATE {
+  * id : bigint <<PK>>
+  --
+  * task_id : bigint <<FK>>
+  * updated_by_id : bigint <<FK>>
+  status : varchar
+  comment : text
+  image : varchar
+  created_at : datetime
+}
+
+entity "tracker_fieldrecord" as TRACKER_FIELDRECORD {
+  * id : bigint <<PK>>
+  --
+  * field_id : bigint <<FK>>
+  project_id : bigint <<FK, nullable>>
+  * created_by_id : bigint <<FK>>
+  crop : varchar
+  crop_stage : varchar
+  advice : text
+  recorded_on : date
+}
+
+AUTH_USER ||--o| TRACKER_USERPROFILE : has
+AUTH_USER ||--o{ TRACKER_FARMPROJECT : manages
+AUTH_USER |o--o{ TRACKER_FARMTASK : assigned_to
+AUTH_USER ||--o{ TRACKER_FARMTASKPROGRESSUPDATE : updates
+AUTH_USER ||--o{ TRACKER_FIELDRECORD : creates
+
+TRACKER_FIELD ||--o{ TRACKER_FARMPROJECT : contains
+TRACKER_FIELD ||--o{ TRACKER_FIELDRECORD : has
+
+TRACKER_FARMPROJECT ||--o{ TRACKER_FARMTASK : has
+TRACKER_FARMPROJECT |o--o{ TRACKER_FIELDRECORD : documents
+
+TRACKER_FARMTASK ||--o{ TRACKER_FARMTASKPROGRESSUPDATE : has
+
+note bottom of TRACKER_USERPROFILE
+  role:
+  FARM_MANAGER
+  FIELD_WORKER
+  AGRONOMIST
+end note
+
+note bottom of TRACKER_FARMPROJECT
+  status:
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+end note
+
+note bottom of TRACKER_FARMTASK
+  status:
+  TODO
+  IN_PROGRESS
+  DONE
+
+  priority:
+  LOW
+  MEDIUM
+  HIGH
+end note
+
+@enduml

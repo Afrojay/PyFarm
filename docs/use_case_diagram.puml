@@ -1,0 +1,61 @@
+@startuml
+title PyFarm Use Case Diagram
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Farm Manager" as FarmManager
+actor "Field Worker" as FieldWorker
+actor "Agronomist" as Agronomist
+
+rectangle "PyFarm" {
+  usecase "Log In" as UC_Login
+  usecase "View Dashboard" as UC_ViewDashboard
+  usecase "View Project Details" as UC_ViewProjectDetails
+  usecase "View Task Details" as UC_ViewTaskDetails
+
+  usecase "Create Field" as UC_CreateField
+  usecase "Create Project" as UC_CreateProject
+  usecase "Create Task" as UC_CreateTask
+  usecase "Assign Task" as UC_AssignTask
+  usecase "Upload Task Image" as UC_UploadTaskImage
+
+  usecase "Update Task Progress" as UC_UpdateTaskProgress
+  usecase "Add Progress Comment" as UC_AddProgressComment
+  usecase "Upload Progress Image" as UC_UploadProgressImage
+
+  usecase "Create Field Record" as UC_CreateFieldRecord
+  usecase "Link Record To Project" as UC_LinkRecordToProject
+}
+
+FarmManager --> UC_Login
+FarmManager --> UC_ViewDashboard
+FarmManager --> UC_ViewProjectDetails
+FarmManager --> UC_ViewTaskDetails
+FarmManager --> UC_CreateField
+FarmManager --> UC_CreateProject
+FarmManager --> UC_CreateTask
+FarmManager --> UC_AssignTask
+FarmManager --> UC_UploadTaskImage
+
+FieldWorker --> UC_Login
+FieldWorker --> UC_ViewDashboard
+FieldWorker --> UC_ViewProjectDetails
+FieldWorker --> UC_ViewTaskDetails
+FieldWorker --> UC_UpdateTaskProgress
+FieldWorker --> UC_AddProgressComment
+FieldWorker --> UC_UploadProgressImage
+
+Agronomist --> UC_Login
+Agronomist --> UC_ViewDashboard
+Agronomist --> UC_ViewProjectDetails
+Agronomist --> UC_CreateFieldRecord
+Agronomist --> UC_LinkRecordToProject
+
+UC_CreateTask ..> UC_AssignTask : <<include>>
+UC_CreateTask ..> UC_UploadTaskImage : <<extend>>
+UC_UpdateTaskProgress ..> UC_AddProgressComment : <<include>>
+UC_UpdateTaskProgress ..> UC_UploadProgressImage : <<extend>>
+UC_CreateFieldRecord ..> UC_LinkRecordToProject : <<extend>>
+
+@enduml

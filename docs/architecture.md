@@ -321,4 +321,11 @@ The view sets `created_by` to the logged-in Agronomist before saving.
 
 ## Notes For Future Improvements
 
-- Add a deployment notes section once the live hosting provider is chosen.
+- Add production environment details, such as configured environment variables and
+  database provider, if the deployment setup changes.
+
+## Deployment
+
+The live PyFarm deployment is hosted on Render:
+
+- Production URL: https://pyfarm.onrender.com
