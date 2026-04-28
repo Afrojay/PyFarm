@@ -3,7 +3,7 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "password": "pbkdf2_sha256$1000000$lrFsspa6Sz68HNQ0WbB89s$C9ZHQcyyIezVpXXvglw/pEsy0un1ydnm8jTDalE4y38=",
       "last_login": null,
       "is_superuser": true,
       "username": "admin",
@@ -21,7 +21,7 @@
     "model": "auth.user",
     "pk": 2,
     "fields": {
-      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "password": "pbkdf2_sha256$1000000$lrFsspa6Sz68HNQ0WbB89s$C9ZHQcyyIezVpXXvglw/pEsy0un1ydnm8jTDalE4y38=",
       "last_login": null,
       "is_superuser": false,
       "username": "manager",
@@ -39,7 +39,7 @@
     "model": "auth.user",
     "pk": 3,
     "fields": {
-      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "password": "pbkdf2_sha256$1000000$lrFsspa6Sz68HNQ0WbB89s$C9ZHQcyyIezVpXXvglw/pEsy0un1ydnm8jTDalE4y38=",
       "last_login": null,
       "is_superuser": false,
       "username": "worker",
@@ -57,7 +57,7 @@
     "model": "auth.user",
     "pk": 4,
     "fields": {
-      "password": "pbkdf2_sha256$1000000$example$fakehashforfixture",
+      "password": "pbkdf2_sha256$1000000$lrFsspa6Sz68HNQ0WbB89s$C9ZHQcyyIezVpXXvglw/pEsy0un1ydnm8jTDalE4y38=",
       "last_login": null,
       "is_superuser": false,
       "username": "agronomist",
@@ -148,10 +148,12 @@
       "project": 1,
       "title": "Prepare soil",
       "description": "Clear weeds and prepare the soil before planting.",
+      "image": "",
       "assigned_to": 3,
       "due_date": "2026-04-05",
       "status": "DONE",
-      "priority": "HIGH"
+      "priority": "HIGH",
+      "progress_comment": "Soil preparation completed and field is ready for planting."
     }
   },
   {
@@ -161,10 +163,12 @@
       "project": 1,
       "title": "Plant seed potatoes",
       "description": "Plant the seed potatoes in prepared rows.",
+      "image": "",
       "assigned_to": 3,
       "due_date": "2026-04-12",
       "status": "IN_PROGRESS",
-      "priority": "HIGH"
+      "priority": "HIGH",
+      "progress_comment": "Half of the north field has been planted."
     }
   },
   {
@@ -174,10 +178,62 @@
       "project": 2,
       "title": "Check soil moisture",
       "description": "Inspect the soil moisture level before planting carrots.",
-      "assigned_to": 4,
+      "image": "",
+      "assigned_to": 3,
       "due_date": "2026-04-15",
       "status": "TODO",
-      "priority": "MEDIUM"
+      "priority": "MEDIUM",
+      "progress_comment": ""
+    }
+  },
+  {
+    "model": "tracker.fieldrecord",
+    "pk": 1,
+    "fields": {
+      "field": 1,
+      "project": 1,
+      "created_by": 4,
+      "crop": "Potatoes",
+      "crop_stage": "Planting",
+      "advice": "Maintain consistent soil moisture and avoid compacting rows after planting.",
+      "recorded_on": "2026-04-14"
+    }
+  },
+  {
+    "model": "tracker.farmtaskprogressupdate",
+    "pk": 1,
+    "fields": {
+      "task": 1,
+      "updated_by": 3,
+      "status": "DONE",
+      "comment": "Soil preparation completed and field is ready for planting.",
+      "image": "",
+      "created_at": "2026-04-05T15:00:00Z"
+    }
+  },
+  {
+    "model": "tracker.farmtaskprogressupdate",
+    "pk": 2,
+    "fields": {
+      "task": 2,
+      "updated_by": 3,
+      "status": "IN_PROGRESS",
+      "comment": "Half of the north field has been planted.",
+      "image": "",
+      "created_at": "2026-04-12T14:30:00Z"
+    }
+  },
+  {
+    "model": "tracker.fieldrecord",
+    "pk": 2,
+    "fields": {
+      "field": 2,
+      "project": 2,
+      "created_by": 4,
+      "crop": "Carrots",
+      "crop_stage": "Pre-planting",
+      "advice": "Check soil moisture before sowing and keep seedbed loose for germination.",
+      "recorded_on": "2026-04-15"
     }
   }
 ]

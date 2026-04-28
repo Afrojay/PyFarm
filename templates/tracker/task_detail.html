@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title }} - PyFarm{% endblock %}
+
+{% block content %}
+    <div class="mb-4">
+        <h1>{{ task.title }}</h1>
+        <p class="lead">{{ task.description }}</p>
+        <p class="mb-1"><strong>Project:</strong> <a href="{% url 'project_detail' task.project.id %}">{{ task.project.title }}</a></p>
+        <p class="mb-1"><strong>Status:</strong> {{ task.status }}</p>
+        <p class="mb-1"><strong>Priority:</strong> {{ task.priority }}</p>
+        <p class="mb-1"><strong>Due date:</strong> {{ task.due_date }}</p>
+        <p class="mb-1"><strong>Assigned to:</strong> {{ task.assigned_to.username|default:"Unassigned" }}</p>
+        {% if task.progress_comment %}
+            <p class="mb-2"><strong>Latest progress comment:</strong> {{ task.progress_comment }}</p>
+        {% endif %}
+        {% if task.image %}
+            <img class="img-thumbnail mb-3" src="{{ task.image.url }}" width="260" alt="{{ task.title }}">
+        {% endif %}
+        <div class="d-flex flex-wrap gap-2">
+            {% if can_complete_tasks %}
+                <a class="btn btn-success" href="{% url 'update_task_progress' task.id %}">Update Progress</a>
+            {% endif %}
+            <a class="btn btn-outline-secondary" href="{% url 'project_detail' task.project.id %}">Back to Project</a>
+            <a class="btn btn-outline-secondary" href="{% url 'home' %}">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <section>
+        <h2 class="h4">Progress History</h2>
+        {% for update in task.progress_updates.all %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between gap-2">
+                        <h3 class="h6 mb-0">{{ update.status }}</h3>
+                        <span class="text-muted">{{ update.created_at|date:"d M Y H:i" }}</span>
+                    </div>
+                    <p class="text-muted mb-2">Updated by {{ update.updated_by.username }}</p>
+                    {% if update.comment %}
+                        <p>{{ update.comment }}</p>
+                    {% endif %}
+                    {% if update.image %}
+                        <img class="img-thumbnail" src="{{ update.image.url }}" width="220" alt="Progress image for {{ task.title }}">
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>No progress updates have been recorded for this task yet.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

@@ -12,10 +12,23 @@ The main required use case is Productivity: Projects and Tasks.
 - Create farm projects
 - Create tasks
 - Mark tasks as done
+- Upload task images (field worker feature)
 - User roles: Farm Manager, Field Worker, Agronomist
-- Basic login protection
+- Role-based access control
+- Login and logout system
 - Sample fixture data
-- Basic automated tests
+- Automated testing
+
+## Demo Users
+
+After loading fixtures, each demo user has the password `password`.
+
+| Username | Role |
+| --- | --- |
+| `admin` | Django admin |
+| `manager` | Farm Manager |
+| `worker` | Field Worker |
+| `agronomist` | Agronomist |
 
 ## Setup
 
@@ -26,5 +39,11 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py loaddata pyfarm_data
 python manage.py runserver
+```
 
-Open http://127.0.0.1:8000/ to view the app.
+## Checks
+
+```bash
+python manage.py check
+python manage.py test
+```

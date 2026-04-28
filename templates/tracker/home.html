@@ -1,67 +1,130 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>PyFarm</title>
-</head>
-<body>
-    <h1>PyFarm</h1>
-    <p>Agricultural planning and task management system.</p>
+{% extends "base.html" %}
 
-    {% if user.is_authenticated %}
-        <p>Logged in as: {{ user.username }}</p>
-        <p>Role: {{ user_role }}</p>
+{% block title %}PyFarm Dashboard{% endblock %}
 
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Log out</button>
-        </form>
-    {% else %}
-        <p>You are not logged in.</p>
-        <a href="{% url 'login' %}">Log in</a>
-    {% endif %}
+{% block content %}
+    <div class="mb-4">
+        <h1 class="mb-1">PyFarm</h1>
+        <p class="text-muted mb-0">Agricultural planning and task management system.</p>
+        {% if user.is_authenticated %}
+            <p class="mt-2 mb-0"><strong>Role:</strong> {{ user_role_display|default:"No role assigned" }}</p>
+        {% endif %}
+    </div>
 
-    <nav>
-        <a href="{% url 'create_field' %}">Add Field</a> |
-        <a href="{% url 'create_project' %}">Create Project</a> |
-        <a href="{% url 'create_task' %}">Create Task</a> |
-        <a href="/admin/">Admin</a>
-    </nav>
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        {% if can_plan_work %}
+            <a class="btn btn-success" href="{% url 'create_field' %}">Add Field</a>
+            <a class="btn btn-success" href="{% url 'create_project' %}">Create Project</a>
+            <a class="btn btn-success" href="{% url 'create_task' %}">Create Task</a>
+        {% endif %}
+        {% if can_create_field_records %}
+            <a class="btn btn-success" href="{% url 'create_field_record' %}">Create Field Record</a>
+        {% endif %}
+    </div>
 
-    
-
-    <hr>
-
-    <h2>Farm Projects</h2>
-
-    {% for project in projects %}
-        <div>
-            <h3><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></h3>
-            <p>{{ project.description }}</p>
-            <p><strong>Field:</strong> {{ project.field.name }}</p>
-            <p><strong>Status:</strong> {{ project.status }}</p>
+    <section class="mb-4">
+        <h2 class="h4">Role Permissions</h2>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h6">Farm Manager</h3>
+                        <p class="mb-0">Creates fields, projects, tasks, and assigns work.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h6">Field Worker</h3>
+                        <p class="mb-0">Views work, updates progress, and marks tasks done.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h6">Agronomist</h3>
+                        <p class="mb-0">Creates field records with crop information and advice.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <hr>
-    {% empty %}
-        <p>No projects yet.</p>
-    {% endfor %}
+    </section>
 
-    <h2>Farm Tasks</h2>
-
-    {% for task in tasks %}
-        <div>
-            <h3>{{ task.title }}</h3>
-            <p>{{ task.description }}</p>
-            <p><strong>Project:</strong> {{ task.project.title }}</p>
-            <p><strong>Status:</strong> {{ task.status }}</p>
-            <p><strong>Priority:</strong> {{ task.priority }}</p>
-
-            {% if task.status != "DONE" %}
-                <a href="{% url 'mark_task_done' task.id %}">Mark as Done</a>
-            {% endif %}
+    <section class="mb-4">
+        <h2 class="h4">Farm Projects</h2>
+        <div class="row g-3">
+            {% for project in projects %}
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h5"><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></h3>
+                            <p>{{ project.description }}</p>
+                            <p class="mb-1"><strong>Field:</strong> {{ project.field.name }}</p>
+                            <p class="mb-0"><strong>Status:</strong> {{ project.status }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No projects yet.</p>
+            {% endfor %}
         </div>
-        <hr>
-    {% empty %}
-        <p>No tasks yet.</p>
-    {% endfor %}
-</body>
-</html>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4">Farm Tasks</h2>
+        <div class="row g-3">
+            {% for task in tasks %}
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h5"><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></h3>
+                            <p>{{ task.description }}</p>
+                            <p class="mb-1"><strong>Project:</strong> {{ task.project.title }}</p>
+                            <p class="mb-1"><strong>Status:</strong> {{ task.status }}</p>
+                            <p class="mb-1"><strong>Priority:</strong> {{ task.priority }}</p>
+                            {% if task.progress_comment %}
+                                <p class="mb-2"><strong>Progress comment:</strong> {{ task.progress_comment }}</p>
+                            {% endif %}
+                            {% if task.image %}
+                                <img class="img-thumbnail mb-2" src="{{ task.image.url }}" width="200" alt="{{ task.title }}">
+                            {% endif %}
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-outline-secondary btn-sm" href="{% url 'task_detail' task.id %}">View Details</a>
+                                {% if can_complete_tasks and task.status != "DONE" %}
+                                    <a class="btn btn-outline-success btn-sm" href="{% url 'update_task_progress' task.id %}">Update Progress</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No tasks yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section>
+        <h2 class="h4">Field Records</h2>
+        <div class="row g-3">
+            {% for record in field_records %}
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h5">{{ record.field.name }} - {{ record.crop }}</h3>
+                            <p class="mb-1"><strong>Crop stage:</strong> {{ record.crop_stage }}</p>
+                            <p>{{ record.advice }}</p>
+                            {% if record.project %}
+                                <p class="mb-1"><strong>Project:</strong> {{ record.project.title }}</p>
+                            {% endif %}
+                            <p class="mb-0 text-muted"><strong>Recorded by:</strong> {{ record.created_by.username }} on {{ record.recorded_on }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No field records yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

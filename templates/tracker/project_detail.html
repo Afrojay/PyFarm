@@ -1,37 +1,72 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ project.title }} - PyFarm</title>
-</head>
-<body>
-    <h1>{{ project.title }}</h1>
+{% extends "base.html" %}
 
-    <p>{{ project.description }}</p>
-    <p><strong>Field:</strong> {{ project.field.name }}</p>
-    <p><strong>Status:</strong> {{ project.status }}</p>
-    <p><strong>Start:</strong> {{ project.start_date }}</p>
-    <p><strong>End:</strong> {{ project.end_date }}</p>
+{% block title %}{{ project.title }} - PyFarm{% endblock %}
 
-    <hr>
+{% block content %}
+    <div class="mb-4">
+        <h1>{{ project.title }}</h1>
+        <p class="lead">{{ project.description }}</p>
+        <p class="mb-1"><strong>Field:</strong> {{ project.field.name }}</p>
+        <p class="mb-1"><strong>Status:</strong> {{ project.status }}</p>
+        <p class="mb-0"><strong>Dates:</strong> {{ project.start_date }} to {{ project.end_date }}</p>
+    </div>
 
-    <h2>Tasks for this project</h2>
+    <section class="mb-4">
+        <h2 class="h4">Tasks for this project</h2>
+        <div class="row g-3">
+            {% for task in tasks %}
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h5"><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></h3>
+                            <p>{{ task.description }}</p>
+                            <p class="mb-1"><strong>Status:</strong> {{ task.status }}</p>
+                            <p class="mb-1"><strong>Priority:</strong> {{ task.priority }}</p>
+                            {% if task.progress_comment %}
+                                <p class="mb-2"><strong>Progress comment:</strong> {{ task.progress_comment }}</p>
+                            {% endif %}
+                            {% if task.image %}
+                                <img class="img-thumbnail mb-2" src="{{ task.image.url }}" width="200" alt="{{ task.title }}">
+                            {% endif %}
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-outline-secondary btn-sm" href="{% url 'task_detail' task.id %}">View Details</a>
+                                {% if can_complete_tasks and task.status != "DONE" %}
+                                    <a class="btn btn-outline-success btn-sm" href="{% url 'update_task_progress' task.id %}">Update Progress</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No tasks for this project yet.</p>
+            {% endfor %}
+        </div>
+    </section>
 
-    {% for task in tasks %}
-        <div>
-            <h3>{{ task.title }}</h3>
-            <p>{{ task.description }}</p>
-            <p><strong>Status:</strong> {{ task.status }}</p>
-            <p><strong>Priority:</strong> {{ task.priority }}</p>
-
-            {% if task.status != "DONE" %}
-                <a href="{% url 'mark_task_done' task.id %}">Mark as Done</a>
+    <section>
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <h2 class="h4 mb-0">Field Records</h2>
+            {% if can_create_field_records %}
+                <a class="btn btn-success btn-sm" href="{% url 'create_field_record' %}">Create Field Record</a>
             {% endif %}
         </div>
-        <hr>
-    {% empty %}
-        <p>No tasks for this project yet.</p>
-    {% endfor %}
+        <div class="row g-3">
+            {% for record in field_records %}
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h5">{{ record.field.name }} - {{ record.crop }}</h3>
+                            <p class="mb-1"><strong>Crop stage:</strong> {{ record.crop_stage }}</p>
+                            <p>{{ record.advice }}</p>
+                            <p class="mb-0 text-muted"><strong>Recorded by:</strong> {{ record.created_by.username }} on {{ record.recorded_on }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No field records for this project yet.</p>
+            {% endfor %}
+        </div>
+    </section>
 
-    <p><a href="{% url 'home' %}">Back to dashboard</a></p>
-</body>
-</html>
+    <p class="mt-4"><a href="{% url 'home' %}">Back to dashboard</a></p>
+{% endblock %}

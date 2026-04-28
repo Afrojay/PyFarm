@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ title }} - PyFarm</title>
-</head>
-<body>
-    <h1>{{ title }}</h1>
+{% extends "base.html" %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
+{% block title %}{{ title }} - PyFarm{% endblock %}
 
-    <p><a href="{% url 'home' %}">Back to dashboard</a></p>
-</body>
-</html>
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="h3 mb-3">{{ title }}</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-success" type="submit">Save</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'home' %}">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
