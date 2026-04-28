@@ -113,6 +113,22 @@ class PyFarmViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "PyFarm")
 
+    def test_manager_navbar_shows_planning_links(self):
+        self.client.login(username="manager", password="password")
+        response = self.client.get(reverse("home"))
+
+        self.assertContains(response, "Add Field")
+        self.assertContains(response, "Create Project")
+        self.assertContains(response, "Create Task")
+
+    def test_worker_navbar_hides_planning_links(self):
+        self.client.login(username="worker", password="password")
+        response = self.client.get(reverse("home"))
+
+        self.assertNotContains(response, "Add Field")
+        self.assertNotContains(response, "Create Project")
+        self.assertNotContains(response, "Create Task")
+
     def test_project_detail_page_loads(self):
         response = self.client.get(reverse("project_detail", args=[self.project.id]))
         self.assertEqual(response.status_code, 200)
